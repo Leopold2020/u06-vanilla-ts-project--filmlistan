@@ -221,20 +221,6 @@ window.addEventListener("popstate", () => {
   renderApp();
 });
 
-// Intercepta länkar och hantera navigation
-// Detta förhindrar att sidan laddas om och bevarar state
-document.addEventListener("click", (e) => {
-  const target = e.target as HTMLElement;
-  const link = target.closest("a");
-  
-  if (link && link.href.startsWith(window.location.origin)) {
-    e.preventDefault();
-    const path = new URL(link.href).pathname;
-    window.history.pushState({}, "", path);
-    renderApp();
-  }
-});
-
 // Set render callback
 setRenderCallback(renderApp);
 ```
