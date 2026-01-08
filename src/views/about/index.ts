@@ -1,11 +1,11 @@
-import type { Movie } from "../../types/movie";
+import type { TMDBMovie } from "../../types/movie";
 
 // En enkel vy som visar en hårdkodad film med information om filmen.
 // Använder typescript för att definiera filmens egenskaper.
 // Använd Store klassen för att hantera state.
 
 
-const demoMovie: Movie = {
+const demoMovie: TMDBMovie = {
   id: 566555,
   title: "Cats",
   overview:
