@@ -10,16 +10,19 @@ import footerHTML from "./views/static/footer/index.html?raw";
 // Dynamiska sidor
 import about from "./views/about/index.ts";
 import browse from "./views/browse/browse.ts";
+import watchlistPage from "./views/watchlist/watchlist.ts";
 
 const currentPage = (): string | HTMLElement => {
   const path = window.location.pathname;
-   switch (path) {
+  switch (path) {
     case "/":
       return homeHTML;
     case "/about":
       return about();
     case "/browse":
       return browse();
+    case "/watchlist":
+      return watchlistPage();
     default:
       return "404";
   }
@@ -28,36 +31,26 @@ const currentPage = (): string | HTMLElement => {
 const app = document.querySelector("#app")!;
 
 // Funktionen som renderar sidan
-const renderApp = () => {
+const renderApp = async () => {
+  const page = await currentPage();
 
-  const page = currentPage();
-    
-  if(typeof page === "string") {
-
-
+  if (typeof page === "string") {
     app.innerHTML = `
           ${headerHTML} 
           ${page} 
           ${footerHTML}`;
-
   } else {
-
-
-    app.innerHTML = 
-    `${headerHTML} 
+    app.innerHTML = `${headerHTML} 
      ${footerHTML}`;
 
-     app.insertBefore(page, app.querySelector("footer")!);
-
+    app.appendChild(page);
   }
-
-
 };
 
 // Initialisera appen
 renderApp();
 
-// Rerender-logic 
+// Rerender-logic
 // Om sidan ändras, rerenderas appen
 window.addEventListener("popstate", () => {
   renderApp();
@@ -68,7 +61,7 @@ window.addEventListener("popstate", () => {
 document.addEventListener("click", (e) => {
   const target = e.target as HTMLElement;
   const link = target.closest("a");
-  
+
   if (link && link.href.startsWith(window.location.origin)) {
     e.preventDefault();
     const path = new URL(link.href).pathname;
