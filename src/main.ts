@@ -7,10 +7,9 @@ import headerHTML from "./views/static/header/index.html?raw";
 import homeHTML from "./views/static/home/index.html?raw";
 import footerHTML from "./views/static/footer/index.html?raw";
 
-
 // Dynamiska sidor
 import about from "./views/about/index.ts";
-
+import browse from "./views/browse/browse.ts";
 
 const currentPage = (): string | HTMLElement => {
   const path = window.location.pathname;
@@ -19,6 +18,8 @@ const currentPage = (): string | HTMLElement => {
       return homeHTML;
     case "/about":
       return about();
+    case "/browse":
+      return browse();
     default:
       return "404";
   }
