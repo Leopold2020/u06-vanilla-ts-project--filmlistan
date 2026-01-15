@@ -23,6 +23,7 @@ export async function getPopularMoviesTMDB() {
 
 export async function getMovies(search: string, currentPage: any) {
   try {
+
     const settings = new URLSearchParams({
       query: search,
       language: "en-US",
@@ -44,8 +45,8 @@ export async function getMovies(search: string, currentPage: any) {
     });
   } catch (error) {
     console.log(error);
-  }
-}
+  };
+};
 
 export async function addToWatchlist(movie_id: number, watched: boolean) {
   try {
