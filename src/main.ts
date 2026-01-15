@@ -43,7 +43,7 @@ const renderApp = async () => {
     app.innerHTML = `${headerHTML} 
      ${footerHTML}`;
 
-    app.appendChild(page);
+     app.insertBefore(page, app.querySelector("footer")!);
   }
 };
 
