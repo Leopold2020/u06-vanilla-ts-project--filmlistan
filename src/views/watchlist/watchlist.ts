@@ -1,4 +1,5 @@
 import { getWatchlist } from "../../services/tmdbApi";
+import "./watchlist.css";
 
 export default async function watchlistPage() {
   const container = document.createElement("div");
@@ -27,6 +28,28 @@ export default async function watchlistPage() {
   const list = document.createElement("div");
   list.classList.add("movie-list");
 
+  const modalOverlay = document.createElement("div");
+modalOverlay.className = "modal-overlay hidden";
+
+const modal = document.createElement("div");
+modal.className = "modal";
+
+const closeBtn = document.createElement("button");
+closeBtn.className = "modal-close";
+closeBtn.textContent = "×";
+
+const modalContent = document.createElement("div");
+modalContent.className = "modal-content";
+
+closeBtn.addEventListener("click", () => {
+  modalOverlay.classList.add("hidden");
+});
+
+modal.appendChild(closeBtn);
+modal.appendChild(modalContent);
+modalOverlay.appendChild(modal);
+document.body.appendChild(modalOverlay);
+
   data.results.forEach((movie: any) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
@@ -53,6 +76,22 @@ export default async function watchlistPage() {
       watchedBtn.textContent = "Watched";
     });
     card.appendChild(watchedBtn);
+
+    const infoBtn = document.createElement("button");
+    infoBtn.classList.add("info-button");
+    infoBtn.textContent = "More Info";
+    infoBtn.addEventListener("click", () => {
+       modalContent.innerHTML = `
+    <h2>${movie.title}</h2>
+    <p><strong>Release:</strong> ${movie.release_date}</p>
+    <p><strong>Rating:</strong> ${movie.vote_average}</p>
+    <p>${movie.overview}</p>
+  `;
+
+  modalOverlay.classList.remove("hidden");
+      
+    });
+    card.appendChild(infoBtn);
 
     list.appendChild(card);
   });
