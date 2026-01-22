@@ -1,4 +1,4 @@
-import { getWatchlist } from "../../services/tmdbApi";
+import { getMovieById } from "../../services/tmdbApi";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
@@ -8,19 +8,23 @@ export async function watchedPage(): Promise<HTMLElement> {
   title.textContent = "Watched Movies";
   container.appendChild(title);
 
-  const data = await getWatchlist();
-
   const watchedList = document.createElement("div");
   watchedList.classList.add("movie-list");
 
   let hasWatched = false;
 
-  data.results.forEach((movie: any) => {
-    if (localStorage.getItem(`watched_${movie.id}`) === "true") {
-      hasWatched = true;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key?.startsWith("watched_") && localStorage.getItem(key) === "true") {
+      const movieId = Number(key.split("_")[1]);
+
+      const movie = await getMovieById(movieId);
+      if (!movie) continue;
+
       watchedList.appendChild(createWatchedCard(movie));
+      hasWatched = true;
     }
-  });
+  }
 
   if (!hasWatched) {
     const empty = document.createElement("p");

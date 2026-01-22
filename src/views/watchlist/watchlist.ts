@@ -1,4 +1,5 @@
-import { getWatchlist } from "../../services/tmdbApi";
+import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
+
 import "./watchlist.css";
 
 export default async function watchlistPage() {
@@ -81,6 +82,15 @@ export default async function watchlistPage() {
       watchedBtn.textContent = "Watched";
     });
     card.appendChild(watchedBtn);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click", async () => {
+      await removeFromWatchlist(movie.id);
+      localStorage.removeItem(`${movie.id}`);
+      card.remove();
+    });
+    card.appendChild(removeBtn);
 
     const infoBtn = document.createElement("button");
     infoBtn.classList.add("info-button");

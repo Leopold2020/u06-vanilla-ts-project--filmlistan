@@ -94,7 +94,6 @@ export default async function browse() {
     watchedBtn.textContent = "Mark as watched";
     watchedBtn.addEventListener("click", () => {
       localStorage.setItem(`watched_${movie.id}`, "true");
-
       watchedBtn.disabled = true;
       watchedBtn.textContent = "Watched";
     });
@@ -104,8 +103,6 @@ export default async function browse() {
     watchListBtn.textContent = "Add to watchlist";
     watchListBtn.addEventListener("click", () => {
       addToWatchlist(movie.id, true);
-      localStorage.setItem(`watched_${movie.id}`, "true");
-
       watchListBtn.disabled = true;
       watchListBtn.textContent = "In Watchlist";
     });
