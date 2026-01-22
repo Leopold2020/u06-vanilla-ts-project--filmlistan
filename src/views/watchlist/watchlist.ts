@@ -52,7 +52,7 @@ export default async function watchlistPage() {
     const watchedBtn = document.createElement("button");
     watchedBtn.textContent = "Mark as watched";
     watchedBtn.addEventListener("click", () => {
-      localStorage.setItem(movie.id.toString(), JSON.stringify(true));
+      localStorage.setItem(`watched_${movie.id}`, "true");
       watchedBtn.disabled = true;
       watchedBtn.textContent = "Watched";
     });
