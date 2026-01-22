@@ -1,4 +1,6 @@
 import { getMovies, getPopularMoviesTMDB, addToWatchlist } from "../../services/tmdbApi";
+import {showInfoModal} from "../../components/infoModal";
+import "../../components/infoModal.css";
 
 export default async function browse() {
   const browse = document.createElement("div");
@@ -13,7 +15,7 @@ export default async function browse() {
 
   let movies: any[] = [];
 
-  function renderMovies(moviesList: any[]) {
+   function renderMovies(moviesList: any[]) {
     try {
       list.innerText = "";
       moviesList.forEach((movie: any) => {
@@ -31,12 +33,13 @@ export default async function browse() {
         info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
                                     <p>Rating: ${movie.vote_average}</p>`;
         card.appendChild(info);
-
+        showInfoModal(movie, card);
         list.appendChild(card);
       });
     } catch (error) {
       console.log(error);
     }
+    
   }
 
   await getPopularMoviesTMDB().then((response?) => {
@@ -110,6 +113,7 @@ export default async function browse() {
       watchListBtn.textContent = "In Watchlist";
     });
     card.appendChild(watchListBtn);
+    showInfoModal(movie, card);
 
     list.appendChild(card);
   });
