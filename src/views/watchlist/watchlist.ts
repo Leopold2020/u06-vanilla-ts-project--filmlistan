@@ -63,6 +63,7 @@ export default async function watchlistPage() {
     removeBtn.addEventListener("click", async () => {
       await removeFromWatchlist(movie.id);
       localStorage.removeItem(`${movie.id}`);
+      localStorage.removeItem(`watchlist_date_${movie.id}`);
       card.remove();
     });
     card.appendChild(removeBtn);
@@ -84,6 +85,13 @@ export default async function watchlistPage() {
     card.appendChild(infoBtn);
     list.appendChild(card);
     showInfoModal(movie, card);
+
+    const addedAt = localStorage.getItem(`watchlist_${movie.id}`) || new Date().toISOString();
+    localStorage.setItem(`watchlist_date_${movie.id}`, addedAt);
+
+    const addedDate = document.createElement("p");
+    addedDate.textContent = `Added on: ${new Date(addedAt).toLocaleDateString()}`;
+    info.appendChild(addedDate);
   });
 
   container.appendChild(list);
