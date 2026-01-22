@@ -1,0 +1,22 @@
+.watched-button {
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 0px 7px 0px 0px;
+  top: 0px;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.watched-button path {
+  width: 20px;
+  height: 20px;
+}
+.watched-button:disabled {
+  cursor: not-allowed;
+  fill: rgb(0, 255, 0) !important;
+}

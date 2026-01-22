@@ -1,8 +1,10 @@
 import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
 
 import "./watchlist.css";
-import { showInfoModal } from "../../components/infoModal";
-import "../../components/infoModal.css";
+import { showInfoModal } from "../../components/infoButton/infoModal";
+import "../../components/infoButton/infoModal.css";
+import { watchedButton } from "../../components/watchedButton/watchedBtn";
+import "../../components/watchedButton/watchedBtn.css";
 
 export default async function watchlistPage() {
   const container = document.createElement("div");
@@ -48,18 +50,19 @@ export default async function watchlistPage() {
                           <p>Rating: ${movie.vote_average}</p>`;
     card.appendChild(info);
 
-    // button "Mark as watched"
-    const watchedBtn = document.createElement("button");
-    watchedBtn.textContent = "Mark as watched";
-    watchedBtn.addEventListener("click", () => {
-      localStorage.setItem(`watched_${movie.id}`, "true");
-      watchedBtn.disabled = true;
-      watchedBtn.textContent = "Watched";
-    });
-    card.appendChild(watchedBtn);
+    // // button "Mark as watched"
+    // const watchedBtn = document.createElement("button");
+    // watchedBtn.textContent = "Mark as watched";
+    // watchedBtn.addEventListener("click", () => {
+    //   localStorage.setItem(`watched_${movie.id}`, "true");
+    //   watchedBtn.disabled = true;
+    //   watchedBtn.textContent = "Watched";
+    // });
+    // card.appendChild(watchedBtn);
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
+    removeBtn.classList.add("remove-button");
     removeBtn.addEventListener("click", async () => {
       await removeFromWatchlist(movie.id);
       localStorage.removeItem(`${movie.id}`);
@@ -67,23 +70,9 @@ export default async function watchlistPage() {
     });
     card.appendChild(removeBtn);
 
-    const infoBtn = document.createElement("button");
-    infoBtn.classList.add("info-button");
-    infoBtn.textContent = "More Info";
-    infoBtn.addEventListener("click", () => {
-      modalContent.innerHTML = `
-        <h2>${movie.title}</h2>
-        <p><strong>Release:</strong> ${movie.release_date}</p>
-        <p><strong>Rating:</strong> ${movie.vote_average}</p>
-        <p>${movie.overview}</p>
-      `;
-
-      modalOverlay.classList.remove("hidden");
-    });
-
-    card.appendChild(infoBtn);
     list.appendChild(card);
     showInfoModal(movie, card);
+    watchedButton(movie, card);
   });
 
   container.appendChild(list);

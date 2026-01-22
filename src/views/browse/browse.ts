@@ -1,6 +1,8 @@
 import { getMovies, getPopularMoviesTMDB, addToWatchlist } from "../../services/tmdbApi";
-import { showInfoModal } from "../../components/infoModal";
-import "../../components/infoModal.css";
+import { showInfoModal } from "../../components/infoButton/infoModal";
+import "../../components/infoButton/infoModal.css";
+import { watchedButton } from "../../components/watchedButton/watchedBtn";
+import "../../components/watchedButton/watchedBtn.css";
 
 export default async function browse() {
   const browse = document.createElement("div");
@@ -34,6 +36,7 @@ export default async function browse() {
                                     <p>Rating: ${movie.vote_average}</p>`;
         card.appendChild(info);
         showInfoModal(movie, card);
+        watchedButton(movie, card);
         list.appendChild(card);
       });
     } catch (error) {
@@ -92,17 +95,18 @@ export default async function browse() {
                             <p>Rating: ${movie.vote_average}</p>`;
     card.appendChild(info);
 
-    const watchedBtn = document.createElement("button");
-    watchedBtn.textContent = "Mark as watched";
-    watchedBtn.addEventListener("click", () => {
-      localStorage.setItem(`watched_${movie.id}`, "true");
-      watchedBtn.disabled = true;
-      watchedBtn.textContent = "Watched";
-    });
-    card.appendChild(watchedBtn);
+    // const watchedBtn = document.createElement("button");
+    // watchedBtn.textContent = "Mark as watched";
+    // watchedBtn.addEventListener("click", () => {
+    //   localStorage.setItem(`watched_${movie.id}`, "true");
+    //   watchedBtn.disabled = true;
+    //   watchedBtn.textContent = "Watched";
+    // });
+    // card.appendChild(watchedBtn);
 
     const watchListBtn = document.createElement("button");
     watchListBtn.textContent = "Add to watchlist";
+    watchListBtn.classList.add("watchlist-button");
     watchListBtn.addEventListener("click", () => {
       addToWatchlist(movie.id, true);
       watchListBtn.disabled = true;
@@ -110,6 +114,7 @@ export default async function browse() {
     });
     card.appendChild(watchListBtn);
     showInfoModal(movie, card);
+    watchedButton(movie, card);
 
     list.appendChild(card);
   });
