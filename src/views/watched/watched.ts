@@ -1,4 +1,6 @@
-import { getMovieById } from "../../services/tmdbApi";
+import { getWatchlist } from "../../services/tmdbApi";
+import { showInfoModal } from "../../components/infoModal";
+import "../../components/infoModal.css";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
@@ -59,6 +61,7 @@ function createWatchedCard(movie: any): HTMLElement {
     card.remove();
   });
   card.appendChild(removeBtn);
+  showInfoModal(movie, card);
 
   return card;
 }
