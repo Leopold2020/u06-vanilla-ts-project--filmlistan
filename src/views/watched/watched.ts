@@ -1,4 +1,4 @@
-import { getWatchlist } from "../../services/tmdbApi";
+import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoModal";
 import "../../components/infoModal.css";
 
