@@ -1,5 +1,5 @@
 import { getMovies, getPopularMoviesTMDB, addToWatchlist } from "../../services/tmdbApi";
-import {showInfoModal} from "../../components/infoModal";
+import { showInfoModal } from "../../components/infoModal";
 import "../../components/infoModal.css";
 
 export default async function browse() {
@@ -15,7 +15,7 @@ export default async function browse() {
 
   let movies: any[] = [];
 
-   function renderMovies(moviesList: any[]) {
+  function renderMovies(moviesList: any[]) {
     try {
       list.innerText = "";
       moviesList.forEach((movie: any) => {
@@ -39,7 +39,6 @@ export default async function browse() {
     } catch (error) {
       console.log(error);
     }
-    
   }
 
   await getPopularMoviesTMDB().then((response?) => {
