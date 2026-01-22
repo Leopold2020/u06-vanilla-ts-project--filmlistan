@@ -23,7 +23,6 @@ export async function getPopularMoviesTMDB() {
 
 export async function getMovies(search: string, currentPage: any) {
   try {
-
     const settings = new URLSearchParams({
       query: search,
       language: "en-US",
@@ -45,8 +44,8 @@ export async function getMovies(search: string, currentPage: any) {
     });
   } catch (error) {
     console.log(error);
-  };
-};
+  }
+}
 
 export async function addToWatchlist(movie_id: number, watched: boolean) {
   try {
@@ -97,6 +96,38 @@ export async function getWatchlist() {
     }
 
     return json;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function removeFromWatchlist(movie_id: number) {
+  const res = await fetch(`https://api.themoviedb.org/3/account/${config.ACCOUNT_ID}/watchlist`, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      Authorization: `Bearer ${config.API_KEY}`,
+    },
+    body: JSON.stringify({
+      media_type: "movie",
+      media_id: movie_id,
+      watchlist: false,
+    }),
+  });
+  return res.json();
+}
+
+export async function getMovieById(movieId: number) {
+  try {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${config.API_KEY}`,
+      },
+    });
+    return await response.json();
   } catch (error) {
     console.log(error);
   }

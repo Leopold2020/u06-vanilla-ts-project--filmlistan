@@ -1,6 +1,7 @@
-import { getWatchlist } from "../../services/tmdbApi";
+import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
+
 import "./watchlist.css";
-import {showInfoModal} from "../../components/infoModal";
+import { showInfoModal } from "../../components/infoModal";
 import "../../components/infoModal.css";
 
 export default async function watchlistPage() {
@@ -57,6 +58,30 @@ export default async function watchlistPage() {
     });
     card.appendChild(watchedBtn);
 
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click", async () => {
+      await removeFromWatchlist(movie.id);
+      localStorage.removeItem(`${movie.id}`);
+      card.remove();
+    });
+    card.appendChild(removeBtn);
+
+    const infoBtn = document.createElement("button");
+    infoBtn.classList.add("info-button");
+    infoBtn.textContent = "More Info";
+    infoBtn.addEventListener("click", () => {
+      modalContent.innerHTML = `
+        <h2>${movie.title}</h2>
+        <p><strong>Release:</strong> ${movie.release_date}</p>
+        <p><strong>Rating:</strong> ${movie.vote_average}</p>
+        <p>${movie.overview}</p>
+      `;
+
+      modalOverlay.classList.remove("hidden");
+    });
+
+    card.appendChild(infoBtn);
     list.appendChild(card);
     showInfoModal(movie, card);
   });
