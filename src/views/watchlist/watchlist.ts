@@ -1,7 +1,8 @@
 import { getWatchlist } from "../../services/tmdbApi";
-import "./watchlist.css";
+// import "./watchlist.css";
 
 export default async function watchlistPage() {
+
   const container = document.createElement("div");
   container.classList.add("watchlist");
 

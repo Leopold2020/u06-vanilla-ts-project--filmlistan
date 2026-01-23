@@ -1,25 +1,29 @@
 .movie-card{
-    border: 1px solid #020202;
-    border-radius: 8px;
-    padding: 10px;
+    /* border: 1px solid red; */
+    background-color: rgba(0, 0, 0, .4);;
+    border-radius: 8px ;
     margin: 10px;
-    width: 200px;
+    width: 300px;
     text-align: center;
     height: auto;
-    width: auto;
-        transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 
 }
-
 .movie-card img{
     width: 100%;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
 }
 
-.movie-list{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+.movie-card h3{
+    font-size: 1rem;
+}
+
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .25rem;
 }
 
 .movie-card:hover {
@@ -27,16 +31,22 @@
     transition: transform 0.3s ease-in-out;
 }
 
-.info-button {
-    background-color: #007BFF;
+.info-button, .movie-card button {
+    background-color: var(--color-primary);
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 10px 5px 15px 5px;
 }
 
+.watchlist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -74,4 +84,10 @@
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 650px) {
+    .movie-card {
+        width: 80%;
+    }
 }

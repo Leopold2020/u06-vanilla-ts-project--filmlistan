@@ -47,20 +47,20 @@ export default async function browse() {
         }
     })
 
-    browse.appendChild(document.createElement("section"));
-    browse.appendChild(document.createElement("h2")).textContent = "Browse";
+    const section = document.createElement("section");
+    browse.appendChild(section);
 
     const input = document.createElement("input");
     input.type = "text";
     input.id = "Input";
     input.placeholder = "Search for names..";
     input.title = "Type in a name";
-    browse.appendChild(input);
+    section.appendChild(input);
 
     const button = document.createElement("button");
     button.id = "searchButton";
-    button.textContent = "Button";
-    browse.appendChild(button);
+    button.textContent = "Search";
+    section.appendChild(button);
 
     button.addEventListener("click", () => {
         const input = document.getElementById("Input") as HTMLInputElement;
@@ -113,6 +113,7 @@ export default async function browse() {
         list.appendChild(card);
     });
 
+    browse.appendChild(list)
     browse.appendChild(list)
     return browse;
 }

@@ -3,3 +3,5 @@
 @import "./views/static/header/style.css";
 @import "./views/static/footer/style.css";
 @import "./views/static/home/style.css";
+@import "./views/watchlist/watchlist.css";
+@import "./views/browse/style.css";
