@@ -1,6 +1,6 @@
 import { getMovieById } from "../../services/tmdbApi";
-import { showInfoModal } from "../../components/infoModal";
-import "../../components/infoModal.css";
+import { showInfoModal } from "../../components/infoButton/infoModal";
+import "../../components/infoButton/infoModal.css";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
@@ -56,6 +56,7 @@ function createWatchedCard(movie: any): HTMLElement {
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
+  removeBtn.classList.add("remove-button");
   removeBtn.addEventListener("click", () => {
     localStorage.removeItem(`watched_${movie.id}`);
     card.remove();

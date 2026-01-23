@@ -8,8 +8,10 @@
     text-align: center;
     height: auto;
     width: auto;
-        transition: transform 0.3s ease-in-out;
-
+    transition: transform 0.3s ease-in-out;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
 }
 
 .movie-card img{
@@ -26,4 +28,30 @@
 .movie-card:hover {
     transform: scale(1.03);
     transition: transform 0.3s ease-in-out;
+}
+
+.remove-button {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  justify-content: center;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.watchlist-button{
+    margin-top: auto;
+    padding: 0.5rem 0.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
