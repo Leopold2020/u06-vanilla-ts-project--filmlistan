@@ -75,8 +75,14 @@ export default async function watchlistPage() {
     showInfoModal(movie, card);
     watchedButton(movie, card);
 
-    const addedAt = localStorage.getItem(`watchlist_${movie.id}`) || new Date().toISOString();
-    localStorage.setItem(`watchlist_date_${movie.id}`, addedAt);
+    const storageKey = `watchlist_date_${movie.id}`;
+
+    let addedAt = localStorage.getItem(storageKey);
+
+    if (!addedAt) {
+      addedAt = new Date().toISOString();
+      localStorage.setItem(storageKey, addedAt);
+    }
 
     const addedDate = document.createElement("p");
     addedDate.textContent = `Added on: ${new Date(addedAt).toLocaleDateString()}`;
