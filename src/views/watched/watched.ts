@@ -1,7 +1,6 @@
 import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
-import "./style.css";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
