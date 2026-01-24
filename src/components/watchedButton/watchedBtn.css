@@ -1,6 +1,7 @@
 .watched-button {
-  width: 36px;
-  height: 36px;
+  width: 45px;
+  height: 45px;
+  fill: rgb(255, 255, 255);
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -12,11 +13,7 @@
   align-items: center;
   justify-content: center;
 }
-.watched-button path {
-  width: 20px;
-  height: 20px;
-}
 .watched-button:disabled {
   cursor: not-allowed;
-  fill: rgb(0, 255, 0) !important;
+  background-color: orange;
 }
