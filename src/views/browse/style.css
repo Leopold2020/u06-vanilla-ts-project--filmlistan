@@ -1,10 +1,117 @@
-#Input {
-    box-sizing: border-box;
-    background-position: 10px 12px;
-    background-repeat: no-repeat;
-    width: 100%;
+.browse {
+    display: flex;
+    flex-direction: column;
+    filter: drop-shadow(0 0 2.25rem var(--color-secondary));
+}
+.browse section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 3vh 0 3vh 0;
+}
+.browse input {
+    width: 70%;
     font-size: 16px;
-    padding: 12px 20px 12px 40px;
-    border: 1px solid #ddd;
-    margin-bottom: 12px;
+    padding: 20px 20px 20px 40px;
+    background-color: rgba(0, 0, 0, 0.15);
+    color: white;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    &:focus{
+        outline: none;
+    };
+}
+.browse section button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+.info-button, .watchlist-button, .remove-button {
+    font-family: "Poppins";
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 5px 15px 5px;
+    text-align: center;
+
+}
+
+.movie-card{
+    /* border: 1px solid red; */
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    overflow: visible;
+    background-color: rgba(0, 0, 0, .4);;
+    border-radius: 8px ;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+    height: auto;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.movie-card img{
+    width: 100%;
+    border-radius: 8px;
+}
+
+.movie-card h3{
+    font-size: 1rem;
+}
+
+.movie-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.movie-info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 0 auto 0;
+}
+
+.movie-card button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 650px) {
+    .browse section {
+        flex-direction: column;
+        align-items: center;
+    }
+    .browse input {
+        width: 80%;
+        border-radius: 8px;
+        border-radius: 8px 8px 0 0;
+    }
+    .browse section button {
+        width: 80%;
+        border-radius: 0 0 8px 8px;
+    }
 }

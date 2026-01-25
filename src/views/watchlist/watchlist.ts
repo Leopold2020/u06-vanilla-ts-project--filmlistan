@@ -1,6 +1,5 @@
 import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
 
-import "./watchlist.css";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 import { watchedButton } from "../../components/watchedButton/watchedBtn";
