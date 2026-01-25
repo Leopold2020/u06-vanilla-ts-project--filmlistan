@@ -2,6 +2,8 @@ import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 
+
+
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
   container.classList.add("watched-page");
@@ -50,9 +52,31 @@ function createWatchedCard(movie: any): HTMLElement {
 
   const info = document.createElement("div");
   info.classList.add("movie-info");
-  info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                    <p>Rating: ${movie.vote_average}</p>`;
+  info.innerHTML = `
+    <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
+    <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+    `;
   card.appendChild(info);
+
+  const editSpan = document.createElement("span");
+  const editBtn = document.createElement("button");
+  const editP = document.createElement("p");
+  editSpan.classList.add("edit-rating");
+  editBtn.textContent = "Edit";
+  editP.textContent = `Your Rating: ${localStorage.getItem(`rating_${movie.id}`) || "N/A"}`;
+  editSpan.appendChild(editP);
+  editSpan.appendChild(editBtn);
+
+  editBtn.addEventListener("click", () => {
+    const newRating = prompt("Enter your new personal rating for this movie (1-10):");
+    if (!Number.isNaN(newRating) &&newRating !== null && Number(newRating) >= 1 && Number(newRating) <= 10) {
+        localStorage.setItem(`rating_${movie.id}`, newRating);
+        editP.textContent = `Your Rating: ${newRating}`;
+      } else {
+        alert("Please enter a valid rating between 1 and 10.");
+      }
+    });
+  card.appendChild(editSpan);
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";

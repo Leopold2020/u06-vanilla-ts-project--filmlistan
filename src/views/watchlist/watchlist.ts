@@ -15,7 +15,7 @@ export default async function watchlistPage() {
 
   const data = await getWatchlist();
 
-  // if wishlist is emmpty
+  // if watchlist is empty
   if (!data || !Array.isArray(data.results) || data.results.length === 0) {
     const empty = document.createElement("p");
     empty.textContent = "Your watchlist is empty.";
@@ -31,22 +31,33 @@ export default async function watchlistPage() {
   // list video
   const list = document.createElement("div");
   list.classList.add("movie-list");
+  
+  // get localstorage
+  const items = ({...localStorage });
 
   data.results.forEach((movie: any) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
 
+    // if movie is watched - change "watched color"
+    let color = false;
+    if (`watched_${movie.id}` in items) {
+      color = true;
+    }
+  
     // poster
     const poster = document.createElement("img");
     poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
     poster.alt = movie.title;
     card.appendChild(poster);
 
-    // title and year
+    // title, year and rating
     const info = document.createElement("div");
     info.classList.add("movie-info");
-    info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                          <p>Rating: ${movie.vote_average}</p>`;
+    info.innerHTML = `
+      <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
+      <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+      `;
     card.appendChild(info);
 
     // // button "Mark as watched"
@@ -72,7 +83,7 @@ export default async function watchlistPage() {
 
     list.appendChild(card);
     showInfoModal(movie, card);
-    watchedButton(movie, card);
+    watchedButton(movie, card, color);
 
     const storageKey = `watchlist_date_${movie.id}`;
 
@@ -82,7 +93,7 @@ export default async function watchlistPage() {
       addedAt = new Date().toISOString();
       localStorage.setItem(storageKey, addedAt);
     }
-
+    
     const addedDate = document.createElement("p");
     addedDate.textContent = `Added on: ${new Date(addedAt).toLocaleDateString()}`;
     info.appendChild(addedDate);

@@ -8,8 +8,9 @@
   --color-background: #161618;
   --color-surface: #ffffff;
   --color-text: #fff;
-  --color-primary: rgb(255, 0, 0);
-  --color-secondary: rgba(255, 0, 0, 0.25);
+  --color-primary: rgb(200, 0, 0);
+  --color-secondary: rgba(200, 0, 0, 0.25);
+  --filter-color: rgba(255, 0, 30, 0.15);
   /* rgba(255, 0, 0, 0.25) red */
   --font-primary: 'Poppins', sans-serif;
 

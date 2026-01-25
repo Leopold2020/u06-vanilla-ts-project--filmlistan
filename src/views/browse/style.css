@@ -1,7 +1,7 @@
 .browse {
     display: flex;
     flex-direction: column;
-    filter: drop-shadow(0 0 2.25rem var(--color-secondary));
+    filter: drop-shadow(0 0 2.25rem var(--filter-color));
 }
 .browse section {
     display: flex;
@@ -38,13 +38,14 @@
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin: 10px 5px 15px 5px;
+    margin: 0 5px 15px 5px;
     text-align: center;
-
+    &:hover {
+        background-color: var(--color-secondary);
+    }
 }
 
 .movie-card{
-    /* border: 1px solid red; */
     display: flex;
     position: relative;
     flex-direction: column;
@@ -54,7 +55,7 @@
     margin: 10px;
     padding: 10px;
     width: 300px;
-    height: auto;
+    height: -webkit-fill-available;
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
@@ -65,8 +66,13 @@
     border-radius: 8px;
 }
 
-.movie-card h3{
+.movie-card  h3 {
     font-size: 1rem;
+    font-weight: 800;
+}
+
+.movie-card h3, p{    
+    margin: 15px 0 5px 0;
 }
 
 .movie-list{
@@ -91,6 +97,7 @@
     color: white;
     border: none;
     padding: 8px 12px;
+    margin: 10px 0 0 0;
     border-radius: 4px;
     cursor: pointer;
 }
