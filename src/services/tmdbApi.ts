@@ -21,13 +21,13 @@ export async function getPopularMoviesTMDB() {
   }
 }
 
-export async function getMovies(search: string, currentPage: any) {
+export async function getMovies(search: string, currentPage: (number|string)) {
   try {
 
     const settings = new URLSearchParams({
       query: search,
       language: "en-US",
-      page: currentPage ?? "1",
+      page: currentPage.toString() ?? "1",
     });
 
     return new Promise<void>(async (resolve) => {
@@ -89,7 +89,7 @@ export async function getWatchlist() {
     const json = await response.json();
 
     if (json && Array.isArray(json.results)) {
-      json.results.forEach((movie: any) => {
+      json.results.forEach((movie: { id: number }) => {
         localStorage.setItem(movie.id.toString(), JSON.stringify(true));
       });
     } else {
