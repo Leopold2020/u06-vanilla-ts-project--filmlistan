@@ -1,0 +1,23 @@
+.watched-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    filter: drop-shadow(0 0 2.25rem var(--filter-color));
+}
+.edit-rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.edit-rating button {
+    font-family: "Poppins", sans-serif;
+    width: fit-content;
+    padding: 8px 12px;
+}
+.edit-rating button:hover {
+    background-color: var(--color-secondary);
+}

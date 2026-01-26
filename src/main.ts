@@ -11,6 +11,7 @@ import footerHTML from "./views/static/footer/index.html?raw";
 import about from "./views/about/index.ts";
 import browse from "./views/browse/browse.ts";
 import watchlistPage from "./views/watchlist/watchlist.ts";
+import { watchedPage } from "./views/watched/watched.ts";
 
 const currentPage = (): string | HTMLElement => {
   const path = window.location.pathname;
@@ -23,6 +24,8 @@ const currentPage = (): string | HTMLElement => {
       return browse();
     case "/watchlist":
       return watchlistPage();
+    case "/watched":
+      return watchedPage();
     default:
       return "404";
   }
@@ -43,7 +46,7 @@ const renderApp = async () => {
     app.innerHTML = `${headerHTML} 
      ${footerHTML}`;
 
-     app.insertBefore(page, app.querySelector("footer")!);
+    app.insertBefore(page, app.querySelector("footer")!);
   }
 };
 

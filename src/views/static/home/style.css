@@ -1,4 +1,8 @@
 main {
     padding: 1rem;
+    width: 50vw;
+    margin: 0 auto;
+    text-align: center;
+    height: 65vh;
 }
 
