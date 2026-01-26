@@ -74,6 +74,7 @@ function createWatchedCard(movie: any): HTMLElement {
         editP.textContent = `Your Rating: ${newRating}`;
       } else {
         alert("Please enter a valid rating between 1 and 10.");
+        location.reload();
       }
     });
   card.appendChild(editSpan);

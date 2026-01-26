@@ -14,9 +14,11 @@ export function watchedButton(movie: { id: number }, card: HTMLElement, seen: Bo
             const personalRating = prompt("Enter your personal rating for this movie (1-10):");
             if (!Number.isNaN(personalRating) && personalRating !== null && Number(personalRating) >= 1 && Number(personalRating) <= 10) {
                 localStorage.setItem(`rating_${movie.id}`, personalRating);
-                localStorage.setItem(`watched_${movie.id}`, "true");
+                localStorage.setItem(`watched_${movie.id}`, "true");  
+                location.reload();
             } else {
-                alert("Please enter a valid rating between 1 and 10.");
+                alert("Please enter a valid rating between 1 and 10.");        
+                location.reload();
             }
             watchedBtn.disabled = true;
             watchedBtn.innerHTML = `
