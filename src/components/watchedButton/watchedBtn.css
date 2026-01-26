@@ -6,14 +6,18 @@
   border: none;
   cursor: pointer;
   position: absolute;
-  border-radius: 0px 7px 0px 0px;
-  top: 0px;
-  right: 0px;
+  border-radius: 8px;
+  top: 0;
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.watched-button:disabled {
-  cursor: not-allowed;
-  background-color: orange;
+.seen {
+  cursor: not-allowed !important;
+  background-color: orange !important;
+}
+
+.watched-button:hover:not(:disabled) {
+  background-color: var(--color-secondary);
 }

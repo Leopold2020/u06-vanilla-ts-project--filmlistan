@@ -12,13 +12,13 @@ header h1 {
   letter-spacing: 5px;
   font-weight: 500;
   margin: 5vh auto 0 auto;
-  filter: drop-shadow(0 0 2.25rem var(--color-secondary));
+  filter: drop-shadow(0 0 2.25rem var(--filter-color));
   font-family: "Audiowide";
 }
 
 nav {
   display: flex;
-  filter: drop-shadow(0 0 2.25rem var(--color-secondary));
+  filter: drop-shadow(0 0 2.25rem var(--filter-color));
   width: 75%;
   height: 50px;
   justify-content: center;

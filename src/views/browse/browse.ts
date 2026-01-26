@@ -23,7 +23,13 @@ export default async function browse() {
       moviesList.forEach((movie: any) => {
         console.log("test search", movie.title);
         const card = document.createElement("div");
-        card.classList.add("movie-card");
+        card.classList.add("movie-card");    
+        // if movie is watched - change "watched color"
+        let color = false;
+        if (`watched_${movie.id}` in items) {
+          color = true;
+        }
+  
 
         const poster = document.createElement("img");
         poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
@@ -33,10 +39,21 @@ export default async function browse() {
         const info = document.createElement("div");
         info.classList.add("movie-info");
         info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                                    <p>Rating: ${movie.vote_average}</p>`;
+                                    <p>Rating: ${movie.vote_average.toFixed(1)}</p>`;
+                       
+        const watchListBtn = document.createElement("button");
+        watchListBtn.textContent = "Add to watchlist";
+        watchListBtn.classList.add("watchlist-button");
+        watchListBtn.addEventListener("click", () => {
+        addToWatchlist(movie.id, true);
+        watchListBtn.disabled = true;
+        watchListBtn.textContent = "In Watchlist";
+        });
         card.appendChild(info);
+        
+        card.appendChild(watchListBtn);
         showInfoModal(movie, card);
-        watchedButton(movie, card);
+        watchedButton(movie, card, color);
         list.appendChild(card);
       });
     } catch (error) {
@@ -52,8 +69,8 @@ export default async function browse() {
   });
 
 
-    const section = document.createElement("section");
-    browse.appendChild(section);
+  const section = document.createElement("section");
+  browse.appendChild(section);
 
   const input = document.createElement("input");
   input.type = "text";
@@ -79,11 +96,20 @@ export default async function browse() {
 
   const list = document.createElement("div");
   list.classList.add("movie-list");
+  
+  // get localstorage
+  const items = ({...localStorage });
 
   movies.forEach((movie: any) => {
     console.log("test", movie.title);
     const card = document.createElement("div");
     card.classList.add("movie-card");
+    
+    // if movie is watched - change "watched color"
+    let color = false;
+    if (`watched_${movie.id}` in items) {
+      color = true;
+    }
 
     const poster = document.createElement("img");
     poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
@@ -93,7 +119,7 @@ export default async function browse() {
     const info = document.createElement("div");
     info.classList.add("movie-info");
     info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                            <p>Rating: ${movie.vote_average}</p>`;
+                            <p>Rating: ${movie.vote_average.toFixed(1)}</p>`;
     card.appendChild(info);
 
     // const watchedBtn = document.createElement("button");
@@ -115,7 +141,7 @@ export default async function browse() {
     });
     card.appendChild(watchListBtn);
     showInfoModal(movie, card);
-    watchedButton(movie, card);
+    watchedButton(movie, card, color);
 
     list.appendChild(card);
   });
