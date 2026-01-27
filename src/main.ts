@@ -13,7 +13,7 @@ import browse from "./views/browse/browse.ts";
 import watchlistPage from "./views/watchlist/watchlist.ts";
 import { watchedPage } from "./views/watched/watched.ts";
 
-const currentPage = (): string | HTMLElement => {
+const currentPage = async (): Promise<string | HTMLElement> => {
   const path = window.location.pathname;
   switch (path) {
     case "/":
@@ -21,11 +21,11 @@ const currentPage = (): string | HTMLElement => {
     case "/about":
       return about();
     case "/browse":
-      return browse();
+      return await browse();
     case "/watchlist":
-      return watchlistPage();
+      return await watchlistPage();
     case "/watched":
-      return watchedPage();
+      return await watchedPage();
     default:
       return "404";
   }

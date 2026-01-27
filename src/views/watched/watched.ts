@@ -1,8 +1,7 @@
 import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
-
-
+import type { TMDBMovie } from "../../types/movie";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
@@ -41,20 +40,20 @@ export async function watchedPage(): Promise<HTMLElement> {
   return container;
 }
 
-function createWatchedCard(movie: any): HTMLElement {
+function createWatchedCard(movie: TMDBMovie): HTMLElement {
   const card = document.createElement("div");
   card.classList.add("movie-card");
 
   const poster = document.createElement("img");
-  poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+  poster.src = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
   poster.alt = movie.title;
   card.appendChild(poster);
 
   const info = document.createElement("div");
   info.classList.add("movie-info");
   info.innerHTML = `
-    <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-    <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+    <h3>${movie.title} (${movie.releaseDate?.slice(0, 4)})</h3>
+    <p>★ ${movie.voteAverage.toFixed(1)}</p>
     `;
   card.appendChild(info);
 
