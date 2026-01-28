@@ -1,4 +1,5 @@
-import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
+// import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
+import { getMoviesList, deleteMovie } from "../../services/movieApi"
 
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
@@ -9,12 +10,13 @@ import type { TMDBMovie } from "../../types/movie";
 export default async function watchlistPage() {
   const container = document.createElement("div");
   container.classList.add("watchlist");
-
+  
   const title = document.createElement("h2");
   title.textContent = "My Watchlist";
   container.appendChild(title);
-
-  const data = await getWatchlist();
+  
+  // const data = await getWatchlist();
+  const data = await getMoviesList("watchlist")
 
   // if watchlist is empty
   if (!data || !Array.isArray(data.results) || data.results.length === 0) {
@@ -22,7 +24,7 @@ export default async function watchlistPage() {
     empty.textContent = "Your watchlist is empty.";
     container.appendChild(empty);
     return container;
-  }
+  };
 
   // number videos
   const count = document.createElement("p");
@@ -36,7 +38,7 @@ export default async function watchlistPage() {
   // get localstorage
   const items = ({...localStorage });
 
-  data.results.forEach((movie: TMDBMovie) => {
+  data.results.forEach((movie: any) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
 
@@ -56,7 +58,7 @@ export default async function watchlistPage() {
     const info = document.createElement("div");
     info.classList.add("movie-info");
     info.innerHTML = `
-      <h3>${movie.title} (${movie.releaseDate?.slice(0, 4)})</h3>
+      <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
       <p>★ ${movie.voteAverage.toFixed(1)}</p>
       `;
     card.appendChild(info);
@@ -75,7 +77,8 @@ export default async function watchlistPage() {
     removeBtn.textContent = "Remove";
     removeBtn.classList.add("remove-button");
     removeBtn.addEventListener("click", async () => {
-      await removeFromWatchlist(movie.id);
+      deleteMovie(movie.id)
+      // await removeFromWatchlist(movie.id);
       localStorage.removeItem(`${movie.id}`);
       localStorage.removeItem(`watchlist_date_${movie.id}`);
       card.remove();

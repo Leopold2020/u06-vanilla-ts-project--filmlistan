@@ -1,8 +1,9 @@
-import { getMovies, getPopularMoviesTMDB, addToWatchlist } from "../../services/tmdbApi";
+import { getMovies, getPopularMoviesTMDB } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 import { watchedButton } from "../../components/watchedButton/watchedBtn";
 import "../../components/watchedButton/watchedBtn.css";
+import { addMovie } from "../../services/movieApi";
 import type { TMDBMovie } from "../../types/movie";
 
 export default async function browse() {
@@ -29,7 +30,6 @@ export default async function browse() {
     try {
       list.innerText = "";
       moviesList.forEach((movie: TMDBMovie) => {
-        console.log("test search", movie.title);
         const card = document.createElement("div");
         card.classList.add("movie-card");    
         // if movie is watched - change "watched color"
@@ -53,9 +53,22 @@ export default async function browse() {
         watchListBtn.textContent = "Add to watchlist";
         watchListBtn.classList.add("watchlist-button");
         watchListBtn.addEventListener("click", () => {
-        addToWatchlist(movie.id, true);
-        watchListBtn.disabled = true;
-        watchListBtn.textContent = "In Watchlist";
+            // const toWatchlist = { ...movie, status: "watchlist" };
+            addMovie(
+              movie.id, 
+              movie.title, 
+              movie.posterPath, 
+              movie.releaseDate, 
+              movie.voteAverage, 
+              movie.overview, 
+              "watchlist", 
+              null, 
+              null, 
+              0, 
+              null
+            )
+            watchListBtn.disabled = true;
+            watchListBtn.textContent = "In Watchlist";
         });
         card.appendChild(info);
         
@@ -73,7 +86,6 @@ export default async function browse() {
     if (response && Array.isArray(response.results) && response.results.length > 0) {
       movies = response.results;
       renderMovies(movies);
-      console.log(response);
     }
   });
 
@@ -95,10 +107,7 @@ export default async function browse() {
 
   button.addEventListener("click", () => {
     const input = document.getElementById("Input") as HTMLInputElement;
-    console.log("test");
-    console.log(input.value);
     getMovies(input.value, 1).then((searchedMovies) => {
-      console.log(searchedMovies);
       renderMovies(searchedMovies.results);
     });
   });

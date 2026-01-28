@@ -1,3 +1,5 @@
+import { updateMovie } from "../../services/movieApi";
+
 export function watchedButton(movie: { id: number }, card: HTMLElement, seen: Boolean) {
     const watchedBtn = document.createElement("button");
     watchedBtn.classList.add("watched-button");
@@ -11,13 +13,17 @@ export function watchedButton(movie: { id: number }, card: HTMLElement, seen: Bo
         watchedBtn.classList.add("seen")
     } else {
         watchedBtn.addEventListener("click", () => {
-            const personalRating = prompt("Enter your personal rating for this movie (1-10):");
-            if (!Number.isNaN(personalRating) && personalRating !== null && Number(personalRating) >= 1 && Number(personalRating) <= 10) {
+            
+            const personalRating = prompt("Enter your personal rating for this movie (1-5):");
+            if (!Number.isNaN(personalRating) && personalRating !== null && Number(personalRating) >= 1 && Number(personalRating) <= 5) {
                 localStorage.setItem(`rating_${movie.id}`, personalRating);
-                localStorage.setItem(`watched_${movie.id}`, "true");  
-                location.reload();
+                localStorage.setItem(`watched_${movie.id}`, "true");
+                localStorage.removeItem(`${movie.id}`);
+                localStorage.removeItem(`watchlist_date_${movie.id}`);
+                updateMovie(movie.id, "watched", parseFloat(personalRating), null, 0, null).then(()=>location.reload());
+
             } else {
-                alert("Please enter a valid rating between 1 and 10.");        
+                alert("Please enter a valid rating between 1 and 5.");        
                 location.reload();
             }
             watchedBtn.disabled = true;

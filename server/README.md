@@ -511,9 +511,9 @@ export async function addToWatchlist(movie: Movie): Promise<void> {
     body: JSON.stringify({
       tmdb_id: movie.id,
       title: movie.title,
-      poster_path: movie.posterPath,
-      release_date: movie.releaseDate,
-      vote_average: movie.voteAverage,
+      poster_path: movie.poster_path,
+      release_date: movie.release_date,
+      vote_average: movie.vote_average,
       overview: movie.overview,
       status: 'watchlist'
     })

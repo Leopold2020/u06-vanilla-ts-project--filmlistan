@@ -1,5 +1,6 @@
 import "./style.css";
 import { setRenderCallback } from "./lib/store.ts";
+import { getSavedMovies } from "./services/movieApi.ts";
 
 // Statiska sidor
 // måste refererera till den specifika .html filen med "?raw" för att kunna läsas in
@@ -30,6 +31,13 @@ const currentPage = async (): Promise<string | HTMLElement> => {
       return "404";
   }
 };
+
+getSavedMovies().then((response)=>{
+  console.log("test")
+    response.results.forEach((movie)=>{
+      localStorage.setItem(`watched_${movie.id}`, "true");
+    })
+  })
 
 const app = document.querySelector("#app")!;
 
