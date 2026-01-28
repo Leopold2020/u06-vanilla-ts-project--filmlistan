@@ -1,5 +1,6 @@
 import "./style.css";
 import { setRenderCallback } from "./lib/store.ts";
+import { getSavedMovies } from "./services/movieApi.ts";
 
 // Statiska sidor
 // måste refererera till den specifika .html filen med "?raw" för att kunna läsas in
@@ -13,7 +14,7 @@ import browse from "./views/browse/browse.ts";
 import watchlistPage from "./views/watchlist/watchlist.ts";
 import { watchedPage } from "./views/watched/watched.ts";
 
-const currentPage = (): string | HTMLElement => {
+const currentPage = async (): Promise<string | HTMLElement> => {
   const path = window.location.pathname;
   switch (path) {
     case "/":
@@ -21,15 +22,22 @@ const currentPage = (): string | HTMLElement => {
     case "/about":
       return about();
     case "/browse":
-      return browse();
+      return await browse();
     case "/watchlist":
-      return watchlistPage();
+      return await watchlistPage();
     case "/watched":
-      return watchedPage();
+      return await watchedPage();
     default:
       return "404";
   }
 };
+
+getSavedMovies().then((response)=>{
+  console.log("test")
+    response.results.forEach((movie)=>{
+      localStorage.setItem(`watched_${movie.id}`, "true");
+    })
+  })
 
 const app = document.querySelector("#app")!;
 

@@ -38,3 +38,20 @@
   display: none;
 }
 
+.modal-inner {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+
+.modal-poster img {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.modal-text {
+  flex: 1;
+}
+

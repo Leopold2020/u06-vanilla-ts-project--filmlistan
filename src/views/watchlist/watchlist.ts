@@ -1,10 +1,11 @@
 // import { getWatchlist, removeFromWatchlist } from "../../services/tmdbApi";
-import { getMovies, deleteMovie } from "../../services/movieApi"
+import { getMoviesList, deleteMovie } from "../../services/movieApi"
 
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 import { watchedButton } from "../../components/watchedButton/watchedBtn";
 import "../../components/watchedButton/watchedBtn.css";
+import type { TMDBMovie } from "../../types/movie";
 
 export default async function watchlistPage() {
   const container = document.createElement("div");
@@ -15,10 +16,10 @@ export default async function watchlistPage() {
   container.appendChild(title);
   
   // const data = await getWatchlist();
-  const data = await getMovies("watchlist")
+  const data = await getMoviesList("watchlist")
 
   // if watchlist is empty
-  if (!data || !Array.isArray(data) || data.length === 0) {
+  if (!data || !Array.isArray(data.results) || data.results.length === 0) {
     const empty = document.createElement("p");
     empty.textContent = "Your watchlist is empty.";
     container.appendChild(empty);
@@ -27,7 +28,7 @@ export default async function watchlistPage() {
 
   // number videos
   const count = document.createElement("p");
-  count.textContent = `Total movies: ${data.length}`;
+  count.textContent = `Total movies: ${data.results.length}`;
   container.appendChild(count);
 
   // list video
@@ -37,7 +38,7 @@ export default async function watchlistPage() {
   // get localstorage
   const items = ({...localStorage });
 
-  data.forEach((movie: any) => {
+  data.results.forEach((movie: any) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
 
@@ -49,7 +50,7 @@ export default async function watchlistPage() {
   
     // poster
     const poster = document.createElement("img");
-    poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+    poster.src = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
     poster.alt = movie.title;
     card.appendChild(poster);
 
@@ -58,7 +59,7 @@ export default async function watchlistPage() {
     info.classList.add("movie-info");
     info.innerHTML = `
       <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-      <p>Rating: ${movie.vote_average?.toFixed(1)}</p>
+      <p>★ ${movie.voteAverage.toFixed(1)}</p>
       `;
     card.appendChild(info);
 

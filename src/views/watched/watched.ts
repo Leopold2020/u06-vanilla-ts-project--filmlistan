@@ -1,8 +1,8 @@
 import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
-import { getMovies, updateMovie } from "../../services/movieApi";
-
+import { getMoviesList, updateMovie } from "../../services/movieApi";
+import type { TMDBMovie } from "../../types/movie";
 
 export async function watchedPage(): Promise<HTMLElement> {
   const container = document.createElement("div");
@@ -17,8 +17,7 @@ export async function watchedPage(): Promise<HTMLElement> {
 
   let hasWatched = false;
 
-  const movies = await getMovies("watched")
-  // const movies = response.json()
+  const movies = await getMoviesList("watched")
 
   // for (let i = 0; i < localStorage.length; i++) {
   //   const key = localStorage.key(i);
@@ -33,7 +32,7 @@ export async function watchedPage(): Promise<HTMLElement> {
   //   }
   // }
 
-  movies.forEach((movie:any) => {
+  movies.results.forEach((movie:TMDBMovie) => {
 
       // const movie = await getMovieById(movieId);
       // if (!movie) continue;
@@ -54,20 +53,20 @@ export async function watchedPage(): Promise<HTMLElement> {
   
 }
 
-function createWatchedCard(movie: any): HTMLElement {
+function createWatchedCard(movie: TMDBMovie): HTMLElement {
   const card = document.createElement("div");
   card.classList.add("movie-card");
 
   const poster = document.createElement("img");
-  poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+  poster.src = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
   poster.alt = movie.title;
   card.appendChild(poster);
 
   const info = document.createElement("div");
   info.classList.add("movie-info");
   info.innerHTML = `
-    <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-    <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+    <h3>${movie.title} (${movie.releaseDate?.slice(0, 4)})</h3>
+    <p>★ ${movie.voteAverage.toFixed(1)}</p>
     `;
   card.appendChild(info);
 
@@ -76,7 +75,7 @@ function createWatchedCard(movie: any): HTMLElement {
   const editP = document.createElement("p");
   editSpan.classList.add("edit-rating");
   editBtn.textContent = "Edit";
-  editP.textContent = `Your Rating: ${localStorage.getItem(`rating_${movie.id}`) || "N/A"}`;
+  editP.textContent = `Your Rating: ${localStorage.getItem(`rating_${movie.id}`) || "N/A"}/5`;
   editSpan.appendChild(editP);
   editSpan.appendChild(editBtn);
 
@@ -85,7 +84,7 @@ function createWatchedCard(movie: any): HTMLElement {
     if (!Number.isNaN(newRating) &&newRating !== null && Number(newRating) >= 1 && Number(newRating) <= 5) {
         updateMovie(movie.id, "watched", parseFloat(newRating), null, 0, null)
         localStorage.setItem(`rating_${movie.id}`, newRating);
-        editP.textContent = `Your Rating: ${newRating}`;
+        editP.textContent = `Your Rating: ${newRating}/5`;
       } else {
         alert("Please enter a valid rating between 1 and 5.");
         location.reload();

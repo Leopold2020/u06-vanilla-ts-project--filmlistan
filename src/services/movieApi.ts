@@ -1,10 +1,11 @@
 // API-anrop till Movie API
+import { convertMovie } from "./tmdbApi"
+import type { MovieListResponse, TMDBMovie } from "../types/movie";
 
 export async function addMovie(
-                        movie: 
-                        {
-                            tmdb_id: string | number,
-                            id: string | number
+                        
+                            // tmdb_id: string | number,
+                            id: string | number,
                             title:any,
                             poster_path:any,
                             release_date:any,
@@ -15,28 +16,28 @@ export async function addMovie(
                             review:any,
                             is_favorite:any,
                             date_watched:any
-                        }
-        ) {
-        const {
-      tmdb_id,
-      id,
-      title,
-      poster_path,
-      release_date,
-      vote_average,
-      overview,
-      status,
-      personal_rating,
-      review,
-      is_favorite,
-      date_watched
-    } = movie
-    return new Promise((resolve: (res: Response) => void, reject) => {
+                       
+        ): Promise<MovieListResponse>  {
+    //     const {
+    // //   tmdb_id,
+    //   id,
+    //   title,
+    //   poster_path,
+    //   release_date,
+    //   vote_average,
+    //   overview,
+    //   status,
+    //   personal_rating,
+    //   review,
+    //   is_favorite,
+    //   date_watched
+    // } = movie
+    return new Promise<MovieListResponse>((resolve, reject) => {
     try {
             fetch("http://localhost:3000/api/movies", {
                 method: "POST",
                 body: JSON.stringify({
-                    tmdb_id: tmdb_id || id,
+                    tmdb_id: id,
                     title: title,
                     poster_path: poster_path,
                     release_date: release_date,
@@ -54,7 +55,11 @@ export async function addMovie(
             })
             .then(response=>response.json())
             .then((data)=>{
-                resolve(data)
+                const converted: MovieListResponse = {
+                            ...data,
+                            results: (data || []).map(convertMovie),
+                          };
+                resolve(converted)
             })
             
         } catch (error) {
@@ -64,8 +69,8 @@ export async function addMovie(
     })
 };
 
-export async function getMovies(status:string) {
-    return new Promise((resolve: (res: Response) => void, reject) => {
+export async function getMoviesList(status:string) {
+    return new Promise<MovieListResponse>((resolve, reject) => {
     try {
             fetch(`http://localhost:3000/api/movies?status=${status}`, {
                 method: "get",
@@ -82,7 +87,11 @@ export async function getMovies(status:string) {
                     // } else {
                     // data.results = [];
                     // }
-                resolve(data)
+                    const converted: MovieListResponse = {
+                            ...data,
+                            results: (data || []).map(convertMovie),
+                          };
+                    resolve(converted)
             })
             
         } catch (error) {
@@ -92,24 +101,51 @@ export async function getMovies(status:string) {
     })
 };
 
-export async function deleteMovie(id:string | number) {
-    return new Promise((resolve: (res: Response) => void, reject) => {
+export async function getSavedMovies() {
+    return new Promise<MovieListResponse>((resolve, reject) => {
     try {
-            fetch(`http://localhost:3000/api/movies/${id}`, {
-                method: "delete",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
+        fetch("http://localhost:3000/api/movies", {
+            method: "get",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+            const converted: MovieListResponse = {
+                    ...data,
+                    results: (data || []).map(convertMovie),
+                  };
+            resolve(converted)
             })
-            .then(response=>response.json())
-            .then((data)=>{
-                resolve(data)
-            })
-            
-        } catch (error) {
-            console.error(error)
-            reject(error)
-        }
+    } catch (error) {
+        console.error(error)
+        reject(error)
+    }
+    })
+}
+
+export async function deleteMovie(id:string | number) {
+    return new Promise<MovieListResponse>((resolve, reject) => {
+    try {
+        fetch(`http://localhost:3000/api/movies/${id}`, {
+            method: "delete",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then(response=>response.json())
+        .then((data)=>{
+        const converted: MovieListResponse = {
+                    ...data,
+                    results: (data || []).map(convertMovie),
+                  };
+        resolve(converted)
+        })
+    } catch (error) {
+        console.error(error)
+        reject(error)
+    }
     })
 };
 
@@ -121,7 +157,7 @@ export async function updateMovie(
         is_favorite: number | BinaryType,
         date_watched: string | null
     ) {
-    return new Promise((resolve: (res: Response) => void, reject) => {
+    return new Promise<MovieListResponse>((resolve, reject) => {
     try {
             fetch(`http://localhost:3000/api/movies/${id}`, {
                 method: "put",
@@ -138,7 +174,11 @@ export async function updateMovie(
             })
             .then(response=>response.json())
             .then((data)=>{  
-                resolve(data)
+                const converted: MovieListResponse = {
+                            ...data,
+                            results: (data || []).map(convertMovie),
+                          };
+                resolve(converted)
             })
             
         } catch (error) {
