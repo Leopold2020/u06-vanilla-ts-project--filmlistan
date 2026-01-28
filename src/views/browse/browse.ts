@@ -3,6 +3,7 @@ import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 import { watchedButton } from "../../components/watchedButton/watchedBtn";
 import "../../components/watchedButton/watchedBtn.css";
+import type { TMDBMovie } from "../../types/movie";
 
 export default async function browse() {
   const browse = document.createElement("div");
@@ -15,12 +16,19 @@ export default async function browse() {
   title.textContent = "My Watchlist";
   container.appendChild(title);
 
-  let movies: any[] = [];
+  let movies: TMDBMovie[] = [];
 
-  function renderMovies(moviesList: any[]) {
+  // Create list and items early so they can be used in renderMovies
+  const list = document.createElement("div");
+  list.classList.add("movie-list");
+  
+  // get localstorage
+  const items = ({...localStorage });
+
+  function renderMovies(moviesList: TMDBMovie[]) {
     try {
       list.innerText = "";
-      moviesList.forEach((movie: any) => {
+      moviesList.forEach((movie: TMDBMovie) => {
         console.log("test search", movie.title);
         const card = document.createElement("div");
         card.classList.add("movie-card");    
@@ -32,14 +40,14 @@ export default async function browse() {
   
 
         const poster = document.createElement("img");
-        poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+        poster.src = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
         poster.alt = movie.title;
         card.appendChild(poster);
 
         const info = document.createElement("div");
         info.classList.add("movie-info");
-        info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                                    <p>Rating: ${movie.vote_average.toFixed(1)}</p>`;
+        info.innerHTML = `<h3>${movie.title} (${movie.releaseDate?.slice(0, 4)})</h3>
+                                    <p>★ ${movie.voteAverage.toFixed(1)}</p>`;
                        
         const watchListBtn = document.createElement("button");
         watchListBtn.textContent = "Add to watchlist";
@@ -61,9 +69,10 @@ export default async function browse() {
     }
   }
 
-  await getPopularMoviesTMDB().then((response?) => {
-    if (!response || !Array.isArray(movies) || movies.length === 0) {
-      movies = response?.results;
+  await getPopularMoviesTMDB().then((response) => {
+    if (response && Array.isArray(response.results) && response.results.length > 0) {
+      movies = response.results;
+      renderMovies(movies);
       console.log(response);
     }
   });
@@ -93,59 +102,7 @@ export default async function browse() {
       renderMovies(searchedMovies.results);
     });
   });
-
-  const list = document.createElement("div");
-  list.classList.add("movie-list");
   
-  // get localstorage
-  const items = ({...localStorage });
-
-  movies.forEach((movie: any) => {
-    console.log("test", movie.title);
-    const card = document.createElement("div");
-    card.classList.add("movie-card");
-    
-    // if movie is watched - change "watched color"
-    let color = false;
-    if (`watched_${movie.id}` in items) {
-      color = true;
-    }
-
-    const poster = document.createElement("img");
-    poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
-    poster.alt = movie.title;
-    card.appendChild(poster);
-
-    const info = document.createElement("div");
-    info.classList.add("movie-info");
-    info.innerHTML = `<h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-                            <p>Rating: ${movie.vote_average.toFixed(1)}</p>`;
-    card.appendChild(info);
-
-    // const watchedBtn = document.createElement("button");
-    // watchedBtn.textContent = "Mark as watched";
-    // watchedBtn.addEventListener("click", () => {
-    //   localStorage.setItem(`watched_${movie.id}`, "true");
-    //   watchedBtn.disabled = true;
-    //   watchedBtn.textContent = "Watched";
-    // });
-    // card.appendChild(watchedBtn);
-
-    const watchListBtn = document.createElement("button");
-    watchListBtn.textContent = "Add to watchlist";
-    watchListBtn.classList.add("watchlist-button");
-    watchListBtn.addEventListener("click", () => {
-      addToWatchlist(movie.id, true);
-      watchListBtn.disabled = true;
-      watchListBtn.textContent = "In Watchlist";
-    });
-    card.appendChild(watchListBtn);
-    showInfoModal(movie, card);
-    watchedButton(movie, card, color);
-
-    list.appendChild(card);
-  });
-
   browse.appendChild(list);
   return browse;
 }

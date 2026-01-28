@@ -1,4 +1,6 @@
-export function showInfoModal(movie: any, card: HTMLElement) {
+import type { TMDBMovie } from "../../types/movie";
+
+export function showInfoModal(movie: TMDBMovie, card: HTMLElement) {
     const modalOverlay = document.createElement("div");
     modalOverlay.className = "modal-overlay hidden";
 
@@ -28,10 +30,17 @@ export function showInfoModal(movie: any, card: HTMLElement) {
 
     infoBtn.addEventListener("click", () => {
        modalContent.innerHTML = `
-    <h2>${movie.title}</h2>
-    <p><strong>Release:</strong> ${movie.release_date}</p>
-    <p><strong>Rating:</strong> ${movie.vote_average}</p>
-    <p>${movie.overview}</p>
+       <div class="modal-inner">
+         <div class="modal-poster">
+           <img src="https://image.tmdb.org/t/p/w300${movie.posterPath}" alt="${movie.title} Poster">
+         </div>
+         <div class="modal-text">
+           <h2>${movie.title}</h2>
+           <p><strong>Release:</strong> ${movie.releaseDate}</p>
+           <p><strong>✭ </strong> ${movie.voteAverage}</p>
+           <p>${movie.overview}</p>
+         </div>
+       </div>
   `;
 
    modalOverlay.classList.remove("hidden");

@@ -4,6 +4,7 @@ import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
 import { watchedButton } from "../../components/watchedButton/watchedBtn";
 import "../../components/watchedButton/watchedBtn.css";
+import type { TMDBMovie } from "../../types/movie";
 
 export default async function watchlistPage() {
   const container = document.createElement("div");
@@ -35,7 +36,7 @@ export default async function watchlistPage() {
   // get localstorage
   const items = ({...localStorage });
 
-  data.results.forEach((movie: any) => {
+  data.results.forEach((movie: TMDBMovie) => {
     const card = document.createElement("div");
     card.classList.add("movie-card");
 
@@ -47,7 +48,7 @@ export default async function watchlistPage() {
   
     // poster
     const poster = document.createElement("img");
-    poster.src = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+    poster.src = `https://image.tmdb.org/t/p/w200${movie.posterPath}`;
     poster.alt = movie.title;
     card.appendChild(poster);
 
@@ -55,8 +56,8 @@ export default async function watchlistPage() {
     const info = document.createElement("div");
     info.classList.add("movie-info");
     info.innerHTML = `
-      <h3>${movie.title} (${movie.release_date?.slice(0, 4)})</h3>
-      <p>Rating: ${movie.vote_average.toFixed(1)}</p>
+      <h3>${movie.title} (${movie.releaseDate?.slice(0, 4)})</h3>
+      <p>★ ${movie.voteAverage.toFixed(1)}</p>
       `;
     card.appendChild(info);
 

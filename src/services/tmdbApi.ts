@@ -1,10 +1,23 @@
 // API-anrop till TMDB API
 import config from "../config";
+import type { MovieListResponse, TMDBMovie } from "../types/movie";
 
-export async function getPopularMoviesTMDB() {
+// Helper function to convert raw TMDB movie to our TMDBMovie type
+function convertMovie(raw: any): TMDBMovie {
+  return {
+    id: raw.id,
+    title: raw.title,
+    overview: raw.overview,
+    posterPath: raw.poster_path,
+    releaseDate: raw.release_date,
+    voteAverage: raw.vote_average,
+  };
+}
+
+export async function getPopularMoviesTMDB(): Promise<MovieListResponse> {
   try {
-    return new Promise<void>(async (resolve) => {
-      await fetch("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc", {
+    return new Promise<MovieListResponse>((resolve) => {
+      fetch("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc", {
         method: "GET",
         headers: {
           accept: "application/json",
@@ -13,24 +26,29 @@ export async function getPopularMoviesTMDB() {
       })
         .then((response) => response.json())
         .then((json) => {
-          resolve(json);
+          const converted: MovieListResponse = {
+            ...json,
+            results: (json.results || []).map(convertMovie),
+          };
+          resolve(converted);
         });
     });
   } catch (error) {
     console.log(error);
+    return { results: [], page: 0, total_pages: 0, total_results: 0 };
   }
 }
 
-export async function getMovies(search: string, currentPage: any) {
+export async function getMovies(search: string, currentPage: number = 1): Promise<MovieListResponse> {
   try {
     const settings = new URLSearchParams({
       query: search,
       language: "en-US",
-      page: currentPage ?? "1",
+      page: String(currentPage),
     });
 
-    return new Promise<void>(async (resolve) => {
-      await fetch("https://api.themoviedb.org/3/search/movie?" + settings.toString(), {
+    return new Promise<MovieListResponse>((resolve) => {
+      fetch("https://api.themoviedb.org/3/search/movie?" + settings.toString(), {
         method: "GET",
         headers: {
           accept: "application/json",
@@ -39,11 +57,16 @@ export async function getMovies(search: string, currentPage: any) {
       })
         .then((response) => response.json())
         .then((json) => {
-          resolve(json);
+          const converted: MovieListResponse = {
+            ...json,
+            results: (json.results || []).map(convertMovie),
+          };
+          resolve(converted);
         });
     });
   } catch (error) {
     console.log(error);
+    return { results: [], page: 0, total_pages: 0, total_results: 0 };
   }
 }
 
@@ -75,7 +98,7 @@ export async function addToWatchlist(movie_id: number, watched: boolean) {
   }
 }
 
-export async function getWatchlist() {
+export async function getWatchlist(): Promise<MovieListResponse> {
   try {
     const response = await fetch(`${config.BASE_URL}/account/${config.ACCOUNT_ID}/watchlist/movies?language=en-US&page=1`, {
       method: "GET",
@@ -95,9 +118,15 @@ export async function getWatchlist() {
       json.results = [];
     }
 
-    return json;
+    const converted: MovieListResponse = {
+      ...json,
+      results: (json.results || []).map(convertMovie),
+    };
+
+    return converted;
   } catch (error) {
     console.log(error);
+    return { results: [], page: 0, total_pages: 0, total_results: 0 };
   }
 }
 
@@ -118,7 +147,7 @@ export async function removeFromWatchlist(movie_id: number) {
   return res.json();
 }
 
-export async function getMovieById(movieId: number) {
+export async function getMovieById(movieId: number): Promise<TMDBMovie | null> {
   try {
     const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
       method: "GET",
@@ -127,31 +156,11 @@ export async function getMovieById(movieId: number) {
         Authorization: `Bearer ${config.API_KEY}`,
       },
     });
-    return await response.json();
+    const data = await response.json();
+    
+    return convertMovie(data);
   } catch (error) {
     console.log(error);
+    return null;
   }
 }
-
-const exampleMovie = {
-  adult: false,
-  backdrop_path: "/4qCqAdHcNKeAHcK8tJ8wNJZa9cx.jpg",
-  genre_ids: [12, 28, 878],
-  id: 11,
-  original_language: "en",
-  original_title: "Star Wars",
-  overview: "Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.",
-  popularity: 21.5056,
-  poster_path: "/6FfCtAuVAW8XJjZ7eWeLibRLWTw.jpg",
-  release_date: "1977-05-25",
-  title: "Star Wars",
-  video: false,
-  vote_average: 8.202,
-  vote_count: 21805,
-};
-
-const exampleWatchlistEntry = {
-  media_type: "movie",
-  media_id: 11,
-  watchlist: true,
-};

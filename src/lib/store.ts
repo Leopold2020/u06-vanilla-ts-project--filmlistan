@@ -1,4 +1,4 @@
-import type { TMDBMovie } from "../types/movie";
+import type { TMDBMovie, MovieListResponse } from "../types/movie";
 import { getPopularMoviesTMDB  } from "../services/tmdbApi.ts";
 
 class Store {
@@ -14,7 +14,8 @@ class Store {
   
   async loadPopularMovies(shouldTriggerRender: boolean = true) {
     try {
-      this.popularMovies = await getPopularMoviesTMDB();
+      const response: MovieListResponse = await getPopularMoviesTMDB();
+      this.popularMovies = response.results;
       if (shouldTriggerRender) {
         this.triggerRender();
       }
