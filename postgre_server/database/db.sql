@@ -18,19 +18,3 @@ CREATE TABLE IF NOT EXISTS movies(
     date_watched TEXT,
     UNIQUE(tmdb_id)
 );
-
-CREATE TABLE test(
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name TEXT NOT NULL
-);
-
-CREATE ROLE movie_watch
-WITH LOGIN PASSWORD 'oskarKalle';
-
-GRANT ALL
-ON test
-TO movie_watch;
-
-GRANT ALL
-ON movies
-TO movie_watch;

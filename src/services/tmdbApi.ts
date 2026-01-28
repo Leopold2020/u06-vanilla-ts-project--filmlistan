@@ -75,48 +75,48 @@ export async function addToWatchlist(movie_id: number, watched: boolean) {
   }
 }
 
-export async function getWatchlist() {
-  try {
-    const response = await fetch(`${config.BASE_URL}/account/${config.ACCOUNT_ID}/watchlist/movies?language=en-US&page=1`, {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${config.API_KEY}`,
-      },
-    });
+// export async function getWatchlist() {
+//   try {
+//     const response = await fetch(`${config.BASE_URL}/account/${config.ACCOUNT_ID}/watchlist/movies?language=en-US&page=1`, {
+//       method: "GET",
+//       headers: {
+//         accept: "application/json",
+//         Authorization: `Bearer ${config.API_KEY}`,
+//       },
+//     });
 
-    const json = await response.json();
+//     const json = await response.json();
 
-    if (json && Array.isArray(json.results)) {
-      json.results.forEach((movie: { id: number }) => {
-        localStorage.setItem(movie.id.toString(), JSON.stringify(true));
-      });
-    } else {
-      json.results = [];
-    }
+//     if (json && Array.isArray(json.results)) {
+//       json.results.forEach((movie: { id: number }) => {
+//         localStorage.setItem(movie.id.toString(), JSON.stringify(true));
+//       });
+//     } else {
+//       json.results = [];
+//     }
 
-    return json;
-  } catch (error) {
-    console.log(error);
-  }
-}
+//     return json;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
-export async function removeFromWatchlist(movie_id: number) {
-  const res = await fetch(`https://api.themoviedb.org/3/account/${config.ACCOUNT_ID}/watchlist`, {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      Authorization: `Bearer ${config.API_KEY}`,
-    },
-    body: JSON.stringify({
-      media_type: "movie",
-      media_id: movie_id,
-      watchlist: false,
-    }),
-  });
-  return res.json();
-}
+// export async function removeFromWatchlist(movie_id: number) {
+//   const res = await fetch(`https://api.themoviedb.org/3/account/${config.ACCOUNT_ID}/watchlist`, {
+//     method: "POST",
+//     headers: {
+//       accept: "application/json",
+//       "content-type": "application/json",
+//       Authorization: `Bearer ${config.API_KEY}`,
+//     },
+//     body: JSON.stringify({
+//       media_type: "movie",
+//       media_id: movie_id,
+//       watchlist: false,
+//     }),
+//   });
+//   return res.json();
+// }
 
 export async function getMovieById(movieId: number) {
   try {

@@ -65,14 +65,13 @@ router.get('/', async (req: Request, res: Response) => {
 
     // Filtrera på status om den skickas in
     if (status) {
-      query += ' WHERE status = ?';
+      query += ` WHERE status = '${status}'`;
       params.push(status);
     }
 
     query += ' ORDER BY date_added DESC';
-
     await db.query(query).then((response:any)=>{
-        const toSend = [...response.rows, ...params] as Movie[]
+        const toSend = [...response.rows] as Movie[]
         res.json(toSend)
     })
     
@@ -97,8 +96,8 @@ router.get('/:id', (req: Request, res: Response) => {
     const { id } = req.params;
 
     const movie = db
-      .prepare('SELECT * FROM movies WHERE id = ?')
-      .get(id) as Movie | undefined;
+      .query('SELECT * FROM movies WHERE id = ?')
+    //   .get(id) as Movie | undefined;
 
     if (!movie) {
       return res.status(404).json({
@@ -234,7 +233,7 @@ router.put('/:id', async (req: Request<{ id: string }, unknown, UpdateMovieBody>
         });
         }
     })
-    console.log("1")
+
     // Validera status om den skickas in
     if (status && !['watchlist', 'watched'].includes(status)) {
       return res.status(400).json({
@@ -329,8 +328,8 @@ router.delete('/:id', (req: Request<{ id: string }>, res: Response) => {
 
     // Kolla om filmen finns
     const movie = db
-      .prepare('SELECT * FROM movies WHERE id = ?')
-      .get(id) as Movie | undefined;
+      .query('SELECT * FROM movies WHERE id = ' + id)
+      
 
     if (!movie) {
       return res.status(404).json({
@@ -340,7 +339,7 @@ router.delete('/:id', (req: Request<{ id: string }>, res: Response) => {
     }
 
     // Ta bort filmen
-    db.prepare('DELETE FROM movies WHERE id = ?').run(id);
+    db.query('DELETE FROM movies WHERE id = ' + id);
 
     res.json({
       message: 'Movie deleted successfully',

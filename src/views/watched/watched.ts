@@ -1,7 +1,7 @@
 import { getMovieById } from "../../services/tmdbApi";
 import { showInfoModal } from "../../components/infoButton/infoModal";
 import "../../components/infoButton/infoModal.css";
-
+import { getMovies, updateMovie } from "../../services/movieApi";
 
 
 export async function watchedPage(): Promise<HTMLElement> {
@@ -17,18 +17,30 @@ export async function watchedPage(): Promise<HTMLElement> {
 
   let hasWatched = false;
 
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key?.startsWith("watched_") && localStorage.getItem(key) === "true") {
-      const movieId = Number(key.split("_")[1]);
+  const movies = await getMovies("watched")
+  // const movies = response.json()
 
-      const movie = await getMovieById(movieId);
-      if (!movie) continue;
+  // for (let i = 0; i < localStorage.length; i++) {
+  //   const key = localStorage.key(i);
+  //   if (key?.startsWith("watched_") && localStorage.getItem(key) === "true") {
+  //     const movieId = Number(key.split("_")[1]);
+
+  //     const movie = await getMovieById(movieId);
+  //     if (!movie) continue;
+
+  //     watchedList.appendChild(createWatchedCard(movie));
+  //     hasWatched = true;
+  //   }
+  // }
+
+  movies.forEach((movie:any) => {
+
+      // const movie = await getMovieById(movieId);
+      // if (!movie) continue;
 
       watchedList.appendChild(createWatchedCard(movie));
       hasWatched = true;
-    }
-  }
+  });
 
   if (!hasWatched) {
     const empty = document.createElement("p");
@@ -39,6 +51,7 @@ export async function watchedPage(): Promise<HTMLElement> {
   }
 
   return container;
+  
 }
 
 function createWatchedCard(movie: any): HTMLElement {
@@ -68,12 +81,13 @@ function createWatchedCard(movie: any): HTMLElement {
   editSpan.appendChild(editBtn);
 
   editBtn.addEventListener("click", () => {
-    const newRating = prompt("Enter your new personal rating for this movie (1-10):");
-    if (!Number.isNaN(newRating) &&newRating !== null && Number(newRating) >= 1 && Number(newRating) <= 10) {
+    const newRating = prompt("Enter your new personal rating for this movie (1-5):");
+    if (!Number.isNaN(newRating) &&newRating !== null && Number(newRating) >= 1 && Number(newRating) <= 5) {
+        updateMovie(movie.id, "watched", parseFloat(newRating), null, 0, null)
         localStorage.setItem(`rating_${movie.id}`, newRating);
         editP.textContent = `Your Rating: ${newRating}`;
       } else {
-        alert("Please enter a valid rating between 1 and 10.");
+        alert("Please enter a valid rating between 1 and 5.");
         location.reload();
       }
     });
